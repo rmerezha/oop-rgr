@@ -7,6 +7,7 @@ import rmerezha.shape.LineShape;
 import rmerezha.shape.RectShape;
 import rmerezha.shape.Shape;
 import rmerezha.util.Point;
+import rmerezha.util.WrappedArray;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class RectEditor extends ShapeEditor {
 
     private Point corner1 = new Point(0, 0);
 
-    public RectEditor(GraphicsContext gc, List<Shape> shapes) {
+    public RectEditor(GraphicsContext gc, WrappedArray<Shape> shapes) {
         super(gc, shapes);
         shape = new RectShape();
     }

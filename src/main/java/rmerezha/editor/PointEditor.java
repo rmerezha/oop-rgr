@@ -7,13 +7,14 @@ import javafx.scene.input.MouseEvent;
 import rmerezha.shape.PointShape;
 import rmerezha.shape.Shape;
 import rmerezha.util.Point;
+import rmerezha.util.WrappedArray;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class PointEditor extends ShapeEditor{
 
-    public PointEditor(GraphicsContext gc, List<Shape> shapes) {
+    public PointEditor(GraphicsContext gc, WrappedArray<Shape> shapes) {
         super(gc, shapes);
         shape = new PointShape();
     }

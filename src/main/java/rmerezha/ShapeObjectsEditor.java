@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import rmerezha.editor.PointEditor;
 import rmerezha.editor.ShapeEditor;
 import rmerezha.shape.Shape;
+import rmerezha.util.WrappedArray;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ShapeObjectsEditor {
     private ShapeEditor editor;
     private final Canvas canvas;
     private final GraphicsContext gc;
-    private final List<Shape> shapes = new ArrayList<>();
+    private final WrappedArray<Shape> shapes = new WrappedArray<>(100+13);
     private final HashMap<EventType<MouseEvent>, EventHandler<MouseEvent>> handlers = new HashMap<>();
 
     public ShapeObjectsEditor(Canvas canvas) {
@@ -37,7 +38,7 @@ public class ShapeObjectsEditor {
 
     public <T extends ShapeEditor> void setEditor(Class<T> clazz) {
         try {
-            this.editor = clazz.getConstructor(new Class<?>[]{GraphicsContext.class, List.class}).newInstance(gc, shapes);
+            this.editor = clazz.getConstructor(new Class<?>[]{GraphicsContext.class, WrappedArray.class}).newInstance(gc, shapes);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -67,7 +68,7 @@ public class ShapeObjectsEditor {
         return gc;
     }
 
-    public List<Shape> getShapes() {
+    public WrappedArray<Shape> getShapes() {
         return shapes;
     }
 }

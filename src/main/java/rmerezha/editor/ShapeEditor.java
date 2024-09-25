@@ -8,6 +8,7 @@ import javafx.scene.paint.Paint;
 import rmerezha.shape.LineShape;
 import rmerezha.shape.Shape;
 import rmerezha.util.Point;
+import rmerezha.util.WrappedArray;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +16,10 @@ import java.util.List;
 public abstract class ShapeEditor extends Editor {
     protected Shape shape;
     protected GraphicsContext gc;
-    protected List<Shape> shapes;
+    protected WrappedArray<Shape> shapes;
 
 
-    public ShapeEditor(GraphicsContext gc, List<Shape> shapes) {
+    public ShapeEditor(GraphicsContext gc, WrappedArray<Shape> shapes) {
         this.gc = gc;
         this.shapes = shapes;
     }
@@ -57,8 +58,8 @@ public abstract class ShapeEditor extends Editor {
     protected void onPaint() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
-        for (Shape shape : shapes) {
-            shape.show(gc);
+        for (int i = 0; i < shapes.size(); i++) {
+            shapes.get(i).show(gc);
         }
     }
 
@@ -78,11 +79,11 @@ public abstract class ShapeEditor extends Editor {
         this.gc = gc;
     }
 
-    public List<Shape> getShapes() {
+    public WrappedArray<Shape> getShapes() {
         return shapes;
     }
 
-    public void setShapes(List<Shape> shapes) {
+    public void setShapes(WrappedArray<Shape> shapes) {
         this.shapes = shapes;
     }
 }
