@@ -2,6 +2,8 @@ package rmerezha.editor;
 
 import javafx.event.EventHandler;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -48,7 +50,7 @@ public abstract class ShapeEditor extends Editor {
         double w2 = Point.w(shape.getP1(), currentPoint);
         double h2 = Point.h(shape.getP1(), currentPoint);
 
-        gc.setStroke(Color.RED);
+        gc.setStroke(Color.BLUE);
         gc.strokeRect(minX2, minY2, w2, h2);
         gc.setStroke(Color.BLACK);
 
@@ -62,6 +64,8 @@ public abstract class ShapeEditor extends Editor {
             shapes.get(i).show(gc);
         }
     }
+
+    public abstract void onInitMenuPopup(Menu menu);
 
     public Shape getShape() {
         return shape;

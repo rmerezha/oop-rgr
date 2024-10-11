@@ -1,6 +1,10 @@
 package rmerezha.editor;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import rmerezha.shape.LineShape;
@@ -13,33 +17,21 @@ import java.util.List;
 
 public class RectEditor extends ShapeEditor {
 
-    private Point corner1 = new Point(0, 0);
-
     public RectEditor(GraphicsContext gc, WrappedArray<Shape> shapes) {
         super(gc, shapes);
         shape = new RectShape();
     }
 
     @Override
-    public void onMouseMove(MouseEvent event) {
-        onPaint();
-
-        Point currentPoint = new Point(event.getX(), event.getY());
-        var corner = Point.findOppositeCorner(shape.getP1(), currentPoint);
-        corner1 = corner;
-        double minX2 = Point.minX(currentPoint, corner);
-        double minY2 = Point.minY(currentPoint, corner);
-        double w2 = Point.w(currentPoint, corner);
-        double h2 = Point.h(currentPoint, corner);
-
-        gc.setStroke(Color.RED);
-        gc.strokeRect(minX2, minY2, w2, h2);
-        gc.setStroke(Color.BLACK);
-    }
-
-    @Override
-    public void onLBup(MouseEvent event) {
-        shape.setP1(corner1);
-        super.onLBup(event);
+    public void onInitMenuPopup(Menu menu) {
+        for (MenuItem i : menu.getItems()) {
+            if (!(i instanceof CheckMenuItem cmi)) {
+                continue;
+            }
+            cmi.setSelected(false);
+            if (cmi.getText().equals("Прямокутник")) {
+                cmi.setSelected(true);
+            }
+        }
     }
 }

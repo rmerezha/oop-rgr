@@ -12,7 +12,7 @@ public class EllipseShape extends Shape {
         double minY = Point.minY(p1,p2);
         double w = Point.w(p1, p2);
         double h = Point.h(p1, p2);
-        gc.setFill(Color.YELLOW);
+        gc.setFill(Color.LIGHTGREEN);
         gc.fillOval(minX, minY, w, h);
         gc.setFill(Color.BLACK);
         gc.strokeOval(minX, minY, w, h);

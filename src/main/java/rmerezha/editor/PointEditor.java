@@ -3,6 +3,10 @@ package rmerezha.editor;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import rmerezha.shape.PointShape;
 import rmerezha.shape.Shape;
@@ -35,5 +39,18 @@ public class PointEditor extends ShapeEditor{
     @Override
     public void onMouseMove(MouseEvent event) {
         // nothing
+    }
+
+    @Override
+    public void onInitMenuPopup(Menu menu) {
+        for (MenuItem i : menu.getItems()) {
+            if (!(i instanceof CheckMenuItem cmi)) {
+                continue;
+            }
+            cmi.setSelected(false);
+            if (cmi.getText().equals("Крапка")) {
+                cmi.setSelected(true);
+            }
+        }
     }
 }

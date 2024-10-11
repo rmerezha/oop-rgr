@@ -5,6 +5,8 @@ import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,7 +26,7 @@ public class ShapeObjectsEditor {
     private ShapeEditor editor;
     private final Canvas canvas;
     private final GraphicsContext gc;
-    private final WrappedArray<Shape> shapes = new WrappedArray<>(100+13);
+    private final WrappedArray<Shape> shapes = new WrappedArray<>(100+14);
     private final HashMap<EventType<MouseEvent>, EventHandler<MouseEvent>> handlers = new HashMap<>();
 
     public ShapeObjectsEditor(Canvas canvas) {
@@ -36,7 +38,7 @@ public class ShapeObjectsEditor {
     }
 
 
-    public <T extends ShapeEditor> void setEditor(Class<T> clazz) {
+    public <T extends ShapeEditor> void setEditor(Class<T> clazz, Menu menu) {
         try {
             this.editor = clazz.getConstructor(new Class<?>[]{GraphicsContext.class, WrappedArray.class}).newInstance(gc, shapes);
         } catch (Exception e) {
@@ -46,6 +48,7 @@ public class ShapeObjectsEditor {
         removeHandlers();
         handlers.clear();
         addHandlers();
+        this.editor.onInitMenuPopup(menu);
     }
 
     private void addHandlers() {
