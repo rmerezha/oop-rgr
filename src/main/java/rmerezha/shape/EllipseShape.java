@@ -4,17 +4,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import rmerezha.util.Point;
 
-public class EllipseShape extends Shape {
 
+public interface EllipseShape extends Shape {
 
     @Override
-    public void show(GraphicsContext gc) {
+    default void show(GraphicsContext gc, Point p1, Point p2, boolean visible) {
         var corner = Point.findOppositeCorner(p1, p2);
         double minX = Point.minX(p2, corner);
         double minY = Point.minY(p2, corner);
         double w = Point.w(p2, corner);
         double h = Point.h(p2, corner);
-        if (isFilled) {
+        if (visible) {
             gc.setFill(Color.LIGHTGREEN);
             gc.fillOval(minX, minY, w, h);
         }
@@ -23,17 +23,9 @@ public class EllipseShape extends Shape {
     }
 
     @Override
-    public String getName() {
+    default String getName() {
         return "Еліпс";
     }
 
-    @Override
-    public Shape clone() {
-        var shape = new EllipseShape();
-        shape.setP1(this.p1);
-        shape.setP2(this.p2);
-        shape.isFilled = this.isFilled;
-        return shape;
-    }
 
 }

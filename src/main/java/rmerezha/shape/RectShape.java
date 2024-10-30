@@ -3,12 +3,10 @@ package rmerezha.shape;
 import javafx.scene.canvas.GraphicsContext;
 import rmerezha.util.Point;
 
-public class RectShape extends Shape {
-
-
+public interface RectShape extends Shape {
 
     @Override
-    public void show(GraphicsContext gc) {
+    default void show(GraphicsContext gc, Point p1, Point p2, boolean visible) {
         double minX = Point.minX(p1, p2);
         double minY = Point.minY(p1,p2);
         double w = Point.w(p1, p2);
@@ -17,16 +15,8 @@ public class RectShape extends Shape {
     }
 
     @Override
-    public String getName() {
+    default String getName() {
         return "Прямокутник";
-    }
-
-    @Override
-    public Shape clone() {
-        var shape = new RectShape();
-        shape.setP1(this.p1);
-        shape.setP2(this.p2);
-        return shape;
     }
 
 }

@@ -9,17 +9,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import rmerezha.shape.EllipseShape;
-import rmerezha.shape.LineShape;
-import rmerezha.shape.PointShape;
-import rmerezha.shape.RectShape;
+import rmerezha.shape.*;
 
 public class App extends Application {
 
-    public static final PointShape POINT_SHAPE = new PointShape();
-    public static final LineShape LINE_SHAPE = new LineShape();
-    public static final RectShape RECT_SHAPE = new RectShape();
-    public static final EllipseShape ELLIPSE_SHAPE = new EllipseShape();
+    public static final PointShape POINT_SHAPE = new PointShape() {};
+    public static final LineShape LINE_SHAPE = new LineShape() {};
+    public static final RectShape RECT_SHAPE = new RectShape() {};
+    public static final EllipseShape ELLIPSE_SHAPE = new EllipseShape() {};
+    public static final LineOOShape LINE_OO_SHAPE = new LineOOShape() {};
+    public static final CubeShape CUBE_SHAPE = new CubeShape() {};
+
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +30,7 @@ public class App extends Application {
 
         Canvas canvas = new Canvas(1200, 900);
 
-        MyEditor editor = new MyEditor(canvas);
+        MyEditor editor = MyEditor.getInstance(canvas);
 
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Об’єкти");
@@ -55,6 +55,16 @@ public class App extends Application {
         ellipseImageView.setFitWidth(20);
         ellipseImageView.setFitHeight(20);
 
+        Image lineOOShapeImage = new Image("line2.png");
+        ImageView lineOOShapeImageView = new ImageView(lineOOShapeImage);
+        lineOOShapeImageView.setFitWidth(20);
+        lineOOShapeImageView.setFitHeight(20);
+
+        Image cubeImage = new Image("cube.png");
+        ImageView cubeView = new ImageView(cubeImage);
+        cubeView.setFitWidth(20);
+        cubeView.setFitHeight(20);
+
         Image trashImage = new Image("trash.png");
         ImageView trashImageView = new ImageView(trashImage);
         trashImageView.setFitWidth(20);
@@ -65,25 +75,34 @@ public class App extends Application {
         Button line = new Button("", lineImageView);
         Button rect = new Button("", rectImageView);
         Button ellipse = new Button("", ellipseImageView);
+        Button lineOOShape = new Button("", lineOOShapeImageView);
+        Button cube = new Button("", cubeView);
         Button clear = new Button("", trashImageView);
         Menu mock1 = new Menu("Файл");
         Menu mock2 = new Menu("Довiдка");
-        Label label = new Label("");
 
         point.setOnAction(event -> {
-            editor.start(new PointShape(), menu);
+            editor.start(POINT_SHAPE, menu);
         });
 
         line.setOnAction(event -> {
-            editor.start(new LineShape(), menu);
+            editor.start(LINE_SHAPE, menu);
         });
 
         rect.setOnAction(event -> {
-            editor.start(new RectShape(), menu);
+            editor.start(RECT_SHAPE, menu);
         });
 
         ellipse.setOnAction(event -> {
-            editor.start(new EllipseShape(), menu);
+            editor.start(ELLIPSE_SHAPE, menu);
+        });
+
+        lineOOShape.setOnAction(event -> {
+            editor.start(LINE_OO_SHAPE, menu);
+        });
+
+        cube.setOnAction(event -> {
+            editor.start(CUBE_SHAPE, menu);
         });
 
         clear.setLayoutX(1100);
@@ -97,6 +116,8 @@ public class App extends Application {
         line.setTooltip(new Tooltip(LINE_SHAPE.getName()));
         rect.setTooltip(new Tooltip(RECT_SHAPE.getName()));
         ellipse.setTooltip(new Tooltip(ELLIPSE_SHAPE.getName()));
+        lineOOShape.setTooltip(new Tooltip(LINE_OO_SHAPE.getName()));
+        cube.setTooltip(new Tooltip(CUBE_SHAPE.getName()));
         clear.setTooltip(new Tooltip("Очистити"));
 
         ToolBar toolBar = ToolbarBuilder.builder()
@@ -104,18 +125,24 @@ public class App extends Application {
                 .setNode(line)
                 .setNode(rect)
                 .setNode(ellipse)
+                .setNode(lineOOShape)
+                .setNode(cube)
                 .setNode(clear)
                 .setNode(new Separator())
                 .build();
 
 
-        CheckMenuItem pointMenu = new CheckMenuItem("Крапка");
-        CheckMenuItem lineMenu = new CheckMenuItem("Лінія");
-        CheckMenuItem rectMenu = new CheckMenuItem("Прямокутник");
-        CheckMenuItem ellipseMenu = new CheckMenuItem("Еліпс");
-        menu.getItems().addAll(pointMenu, lineMenu, rectMenu, ellipseMenu);
+        CheckMenuItem pointMenu = new CheckMenuItem(POINT_SHAPE.getName());
+        CheckMenuItem lineMenu = new CheckMenuItem(LINE_SHAPE.getName());
+        CheckMenuItem rectMenu = new CheckMenuItem(RECT_SHAPE.getName());
+        CheckMenuItem ellipseMenu = new CheckMenuItem(ELLIPSE_SHAPE.getName());
+        CheckMenuItem lineOOShapeMenu = new CheckMenuItem(LINE_OO_SHAPE.getName());
+        CheckMenuItem cubeMenu = new CheckMenuItem(CUBE_SHAPE.getName());
+        menu.getItems().addAll(pointMenu, lineMenu, rectMenu, ellipseMenu, lineOOShapeMenu, cubeMenu);
         menuBar.getMenus().addAll(mock1, menu, mock2);
 
+
+        // ----
         BorderPane root = new BorderPane();
         VBox topContainer = new VBox(0);
         topContainer.getChildren().addAll(menuBar, toolBar);

@@ -11,19 +11,29 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 import rmerezha.shape.Shape;
+import rmerezha.shape.ShapeStorage;
 import rmerezha.util.Point;
 import rmerezha.util.WrappedArray;
 
 import java.util.HashMap;
 
 public class MyEditor {
-    private Shape shape;
-    private final Canvas canvas;
+    private ShapeStorage shapeStorage;
+    private Canvas canvas;
     private final GraphicsContext gc;
-    private final WrappedArray<Shape> shapes = new WrappedArray<>(100+14);
+    private final WrappedArray<ShapeStorage> shapes = new WrappedArray<>(100+14);
     private final HashMap<EventType<MouseEvent>, EventHandler<MouseEvent>> handlers = new HashMap<>();
 
-    public MyEditor(Canvas canvas) {
+    private static MyEditor myEditor;
+
+    public static MyEditor getInstance(Canvas canvas) {
+        if (myEditor == null) {
+            myEditor = new MyEditor(canvas);
+        }
+        return myEditor;
+    }
+
+    private MyEditor(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
         this.gc.setStroke(Color.BLACK);
@@ -32,7 +42,7 @@ public class MyEditor {
 
 
     public void start(Shape shape, Menu menu) {
-        this.shape = shape;
+        this.shapeStorage = new ShapeStorage(shape, null, null);
         removeHandlers();
         handlers.clear();
         addHandlers();
@@ -59,19 +69,19 @@ public class MyEditor {
         return gc;
     }
 
-    public WrappedArray<Shape> getShapes() {
+    public WrappedArray<ShapeStorage> getShapes() {
         return shapes;
     }
 
     public void onLBdown(MouseEvent event) {
-        shape.withFill(false);
-        shape.setP1(new Point(event.getX(), event.getY()));
+        shapeStorage.setVisible(false);
+        shapeStorage.setP1(new Point(event.getX(), event.getY()));
     }
 
     public void onLBup(MouseEvent event) {
-        shape.withFill(true);
-        shape.setP2(new Point(event.getX(), event.getY()));
-        shapes.add(shape.clone());
+        shapeStorage.setVisible(true);
+        shapeStorage.setP2(new Point(event.getX(), event.getY()));
+        shapes.add(shapeStorage.clone());
         onPaint();
     }
 
@@ -79,10 +89,10 @@ public class MyEditor {
     public void onMouseMove(MouseEvent event) {
         onPaint();
 
-        shape.setP2(new Point(event.getX(), event.getY()));
+        shapeStorage.setP2(new Point(event.getX(), event.getY()));
 
         gc.setLineDashes(50, 25);
-        shape.show(gc);
+        shapeStorage.show(gc);
         gc.setLineDashes(1);
         gc.setStroke(Color.BLACK);
 
@@ -100,18 +110,18 @@ public class MyEditor {
         for (MenuItem i : menu.getItems()) {
             var cmi = (CheckMenuItem) i;
             cmi.setSelected(false);
-            if (cmi.getText().equals(shape.getName())) {
+            if (cmi.getText().equals(shapeStorage.getShape().getName())) {
                 cmi.setSelected(true);
             }
         }
     }
 
-    public Shape getShape() {
-        return shape;
+    public ShapeStorage getShapeStorage() {
+        return shapeStorage;
     }
 
-    public void setShape(Shape shape) {
-        this.shape = shape;
+    public void setShapeStorage(ShapeStorage shapeStorage) {
+        this.shapeStorage = shapeStorage;
     }
 
 }
