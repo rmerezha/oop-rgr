@@ -1,7 +1,6 @@
 package rmerezha;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
 
 import java.util.ArrayList;

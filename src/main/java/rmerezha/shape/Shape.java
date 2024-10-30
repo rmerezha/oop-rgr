@@ -7,6 +7,8 @@ public abstract class Shape {
 
     protected Point p1,p2;
 
+    protected volatile Boolean isFilled = false;
+
     public void setP1(Point p1) {
         this.p1 = p1;
     }
@@ -24,13 +26,14 @@ public abstract class Shape {
     }
 
     public abstract void show(GraphicsContext gc);
+
+    public abstract String getName();
+
     public abstract Shape clone();
 
-    @Override
-    public String toString() {
-        return "Shape{" +
-                "p1=" + p1 +
-                ", p2=" + p2 +
-                '}';
+
+    public void withFill(boolean b) {
+        this.isFilled = b;
     }
+
 }

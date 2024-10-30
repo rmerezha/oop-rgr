@@ -1,22 +1,25 @@
 package rmerezha;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import rmerezha.editor.*;
+import rmerezha.shape.EllipseShape;
+import rmerezha.shape.LineShape;
+import rmerezha.shape.PointShape;
+import rmerezha.shape.RectShape;
 
 public class App extends Application {
 
-    public static final String POINT = "Крапка";
-    public static final String LINE = "Лінія";
-    public static final String RECT = "Прямокутник";
-    public static final String ELLIPSE = "Еліпс";
+    public static final PointShape POINT_SHAPE = new PointShape();
+    public static final LineShape LINE_SHAPE = new LineShape();
+    public static final RectShape RECT_SHAPE = new RectShape();
+    public static final EllipseShape ELLIPSE_SHAPE = new EllipseShape();
 
     public static void main(String[] args) {
         launch(args);
@@ -27,7 +30,7 @@ public class App extends Application {
 
         Canvas canvas = new Canvas(1200, 900);
 
-        ShapeObjectsEditor editor = new ShapeObjectsEditor(canvas);
+        MyEditor editor = new MyEditor(canvas);
 
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Об’єкти");
@@ -68,19 +71,19 @@ public class App extends Application {
         Label label = new Label("");
 
         point.setOnAction(event -> {
-            editor.setEditor(PointEditor.class, menu);
+            editor.start(new PointShape(), menu);
         });
 
         line.setOnAction(event -> {
-            editor.setEditor(LineEditor.class, menu);
+            editor.start(new LineShape(), menu);
         });
 
         rect.setOnAction(event -> {
-            editor.setEditor(RectEditor.class, menu);
+            editor.start(new RectShape(), menu);
         });
 
         ellipse.setOnAction(event -> {
-            editor.setEditor(EllipseEditor.class, menu);
+            editor.start(new EllipseShape(), menu);
         });
 
         clear.setLayoutX(1100);
@@ -90,10 +93,10 @@ public class App extends Application {
             editor.getShapes().clear();
         });
 
-        point.setTooltip(new Tooltip(POINT));
-        line.setTooltip(new Tooltip(LINE));
-        rect.setTooltip(new Tooltip(RECT));
-        ellipse.setTooltip(new Tooltip(ELLIPSE));
+        point.setTooltip(new Tooltip(POINT_SHAPE.getName()));
+        line.setTooltip(new Tooltip(LINE_SHAPE.getName()));
+        rect.setTooltip(new Tooltip(RECT_SHAPE.getName()));
+        ellipse.setTooltip(new Tooltip(ELLIPSE_SHAPE.getName()));
         clear.setTooltip(new Tooltip("Очистити"));
 
         ToolBar toolBar = ToolbarBuilder.builder()

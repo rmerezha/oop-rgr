@@ -5,6 +5,8 @@ import rmerezha.util.Point;
 
 public class RectShape extends Shape {
 
+
+
     @Override
     public void show(GraphicsContext gc) {
         double minX = Point.minX(p1, p2);
@@ -12,6 +14,11 @@ public class RectShape extends Shape {
         double w = Point.w(p1, p2);
         double h = Point.h(p1, p2);
         gc.strokeRect(minX, minY, w, h);
+    }
+
+    @Override
+    public String getName() {
+        return "Прямокутник";
     }
 
     @Override

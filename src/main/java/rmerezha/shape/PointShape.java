@@ -6,7 +6,12 @@ public class PointShape extends Shape {
 
     @Override
     public void show(GraphicsContext gc) {
-        gc.strokeLine(p1.x(), p1.y(), p2.x(), p2.y());
+        gc.fillOval(p1.x(), p1.y(), 10,10);
+    }
+
+    @Override
+    public String getName() {
+        return "Крапка";
     }
 
     @Override

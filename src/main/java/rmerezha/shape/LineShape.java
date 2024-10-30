@@ -17,5 +17,10 @@ public class LineShape extends Shape {
         return shape;
     }
 
+    @Override
+    public String getName() {
+        return "Лінія";
+    }
+
 
 }
