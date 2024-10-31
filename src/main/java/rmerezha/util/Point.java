@@ -28,4 +28,9 @@ public record Point(double x, double y) {
 
         return new Point(oppositeX, oppositeY);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x() + ", " + y() + ")";
+    }
 }

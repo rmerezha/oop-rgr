@@ -1,15 +1,20 @@
 package rmerezha;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import rmerezha.shape.*;
+import rmerezha.table.MyTable;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class App extends Application {
 
@@ -19,7 +24,8 @@ public class App extends Application {
     public static final EllipseShape ELLIPSE_SHAPE = new EllipseShape() {};
     public static final LineOOShape LINE_OO_SHAPE = new LineOOShape() {};
     public static final CubeShape CUBE_SHAPE = new CubeShape() {};
-
+    public static final MyEditor editor = MyEditor.getInstance();
+    public static final MyTable<ShapeStorage> myTable = MyTable.createWindow();
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +36,7 @@ public class App extends Application {
 
         Canvas canvas = new Canvas(1200, 900);
 
-        MyEditor editor = MyEditor.getInstance(canvas);
+        editor.setCanvas(canvas);
 
         MenuBar menuBar = new MenuBar();
         Menu menu = new Menu("Об’єкти");
@@ -80,6 +86,20 @@ public class App extends Application {
         Button clear = new Button("", trashImageView);
         Menu mock1 = new Menu("Файл");
         Menu mock2 = new Menu("Довiдка");
+        Menu tableMenu = new Menu("Таблиця");
+
+        myTable.addColumn("Name", cellData ->
+                new SimpleStringProperty(cellData.getValue().getShape().getName())
+        );
+        myTable.addColumn("Point1", cellData ->
+                new SimpleStringProperty(cellData.getValue().getP1().toString())
+        );
+        myTable.addColumn("Point2", cellData ->
+                new SimpleStringProperty(cellData.getValue().getP2().toString()));
+
+        canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
+            myTable.addEntity(editor.getCurrentShape());
+        });
 
         point.setOnAction(event -> {
             editor.start(POINT_SHAPE, menu);
@@ -110,6 +130,7 @@ public class App extends Application {
         clear.setOnAction(event -> {
             editor.getGc().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             editor.getShapes().clear();
+            myTable.clear();
         });
 
         point.setTooltip(new Tooltip(POINT_SHAPE.getName()));
@@ -138,8 +159,28 @@ public class App extends Application {
         CheckMenuItem ellipseMenu = new CheckMenuItem(ELLIPSE_SHAPE.getName());
         CheckMenuItem lineOOShapeMenu = new CheckMenuItem(LINE_OO_SHAPE.getName());
         CheckMenuItem cubeMenu = new CheckMenuItem(CUBE_SHAPE.getName());
+
+        MenuItem showTable = new MenuItem("Вiдкрити таблицю");
+        MenuItem closeTable = new MenuItem("Закрити таблицю");
+
+        AtomicBoolean isOn = new AtomicBoolean(false);
+        showTable.setOnAction(event -> {
+            if (!isOn.get()) {
+                myTable.show();
+                isOn.set(true);
+            }
+        });
+        closeTable.setOnAction(event -> {
+            if (isOn.get()) {
+                myTable.close();
+                isOn.set(false);
+            }
+        });
         menu.getItems().addAll(pointMenu, lineMenu, rectMenu, ellipseMenu, lineOOShapeMenu, cubeMenu);
-        menuBar.getMenus().addAll(mock1, menu, mock2);
+        tableMenu.getItems().addAll(showTable, closeTable);
+        menuBar.getMenus().addAll(mock1, menu, mock2, tableMenu);
+
+
 
 
         // ----
@@ -181,10 +222,14 @@ public class App extends Application {
             trashImageView.setFitWidth(toolBar.getMaxHeight() / 2);
         });
 
-
+        primaryStage.setOnCloseRequest(e -> {
+            if (isOn.get()) {
+                myTable.close();
+            }
+        });
 
         Scene scene = new Scene(root, 1200, 900);
-        primaryStage.setTitle("Lab2");
+        primaryStage.setTitle("Lab5");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

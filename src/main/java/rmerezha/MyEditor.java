@@ -20,26 +20,27 @@ import java.util.HashMap;
 public class MyEditor {
     private ShapeStorage shapeStorage;
     private Canvas canvas;
-    private final GraphicsContext gc;
+    private GraphicsContext gc;
     private final WrappedArray<ShapeStorage> shapes = new WrappedArray<>(100+14);
     private final HashMap<EventType<MouseEvent>, EventHandler<MouseEvent>> handlers = new HashMap<>();
 
-    private static MyEditor myEditor;
+    private ShapeStorage currentShape;
 
-    public static MyEditor getInstance(Canvas canvas) {
-        if (myEditor == null) {
-            myEditor = new MyEditor(canvas);
-        }
-        return myEditor;
+    private static final MyEditor INSTANCE = new MyEditor();
+
+    public static MyEditor getInstance() {
+        return INSTANCE;
     }
 
-    private MyEditor(Canvas canvas) {
+    private MyEditor() {
+    }
+
+    public void setCanvas(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
         this.gc.setStroke(Color.BLACK);
         this.gc.setLineWidth(5);
     }
-
 
     public void start(Shape shape, Menu menu) {
         this.shapeStorage = new ShapeStorage(shape, null, null);
@@ -55,13 +56,13 @@ public class MyEditor {
         handlers.put(MouseEvent.MOUSE_RELEASED, this::onLBup);
 
         for (var entry : handlers.entrySet()) {
-            canvas.addEventHandler(entry.getKey(), entry.getValue());
+            canvas.addEventFilter(entry.getKey(), entry.getValue());
         }
     }
 
     private void removeHandlers() {
         for (var entry : handlers.entrySet()) {
-            canvas.removeEventHandler(entry.getKey(), entry.getValue());
+            canvas.removeEventFilter(entry.getKey(), entry.getValue());
         }
     }
 
@@ -83,6 +84,7 @@ public class MyEditor {
         shapeStorage.setP2(new Point(event.getX(), event.getY()));
         shapes.add(shapeStorage.clone());
         onPaint();
+        currentShape = shapeStorage;
     }
 
 
@@ -116,12 +118,7 @@ public class MyEditor {
         }
     }
 
-    public ShapeStorage getShapeStorage() {
-        return shapeStorage;
+    public ShapeStorage getCurrentShape() {
+        return currentShape;
     }
-
-    public void setShapeStorage(ShapeStorage shapeStorage) {
-        this.shapeStorage = shapeStorage;
-    }
-
 }
