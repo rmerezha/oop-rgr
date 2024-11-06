@@ -49,6 +49,7 @@ public class MyTable<T> {
     public void addColumn(String name, Callback<TableColumn.CellDataFeatures<T,String>, ObservableValue<String>> callback) {
         TableColumn<T, String> column = new TableColumn<>(name);
         column.setCellValueFactory(callback);
+        column.setStyle("-fx-font-size: 20px;");
         table.getColumns().add(column);
     }
 

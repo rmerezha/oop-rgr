@@ -88,13 +88,13 @@ public class App extends Application {
         Menu mock2 = new Menu("Довiдка");
         Menu tableMenu = new Menu("Таблиця");
 
-        myTable.addColumn("Name", cellData ->
+        myTable.addColumn("Назва", cellData ->
                 new SimpleStringProperty(cellData.getValue().getShape().getName())
         );
-        myTable.addColumn("Point1", cellData ->
+        myTable.addColumn("Початкові координати", cellData ->
                 new SimpleStringProperty(cellData.getValue().getP1().toString())
         );
-        myTable.addColumn("Point2", cellData ->
+        myTable.addColumn("Кінцеві координати", cellData ->
                 new SimpleStringProperty(cellData.getValue().getP2().toString()));
 
         canvas.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
