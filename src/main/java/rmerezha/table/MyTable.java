@@ -54,6 +54,9 @@ public class MyTable<T> {
     }
 
     public void addEntity(T entity) {
+        if ( entity == null ) {
+            return;
+        }
         entities.add(entity);
         write(entity);
     }

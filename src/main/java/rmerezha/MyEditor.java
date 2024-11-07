@@ -80,6 +80,9 @@ public class MyEditor {
     }
 
     public void onLBup(MouseEvent event) {
+        if (shapeStorage == null) {
+            return;
+        }
         shapeStorage.setVisible(true);
         shapeStorage.setP2(new Point(event.getX(), event.getY()));
         shapes.add(shapeStorage.clone());
